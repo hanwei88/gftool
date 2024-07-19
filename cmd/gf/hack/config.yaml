@@ -1,0 +1,38 @@
+
+# CLI tool, only in development environment.
+# https://goframe.org/pages/viewpage.action?pageId=3673173
+gfcli:
+  build:
+#    packSrc: "manifest,resource"
+#    arch: "amd64"
+    arch: "all"
+    system: "all"
+    path: "./bin"
+    name: "gf"
+    version: "2.7.1"
+    arg: "-ldflags \"%s -s -w\" -buildmode=pie"
+    IsSameDir: true
+
+  gen:
+    dao:
+      - link: "mysql:root:123456@tcp(127.0.0.1:8803)/shop?charset=utf8mb4"
+        removePrefix: "hw_"
+        withTime: true
+        gJsonSupport: true
+        clear: true
+        descriptionTag: true
+        jsonCase: "Snake"
+        typeMapping:
+          tinyint:
+            type: int8
+          tinyint unsigned:
+            type: uint8
+        jsonIgnoreField:
+          - "password"
+          - "salt"
+          - "delete_time"
+        hashTag:
+          pk: true
+          table:
+            ha_admin_dd:
+              - "num"
