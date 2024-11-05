@@ -327,10 +327,10 @@ func (c cBuild) doBinaryBuild(
 		if strings.Index(arg, "-version=") == 0 {
 			info.WriteString(fmt.Sprintf(" -X main.appVersion=%s ", strings.Replace(arg, "-version=", "", 1)))
 		}
-
-		if strings.Index(arg, "-upVersion") == 0 {
-			info.WriteString(fmt.Sprintf(" -X main.upVersion=%s ", strings.Replace(arg, "-upVersion=", "", 1)))
-		}
+		//
+		//if strings.Index(arg, "-upVersion") == 0 {
+		//	info.WriteString(fmt.Sprintf(" -X main.upVersion=%s ", strings.Replace(arg, "-upVersion=", "", 1)))
+		//}
 	}
 
 	extra = fmt.Sprintf(extra, info.String())

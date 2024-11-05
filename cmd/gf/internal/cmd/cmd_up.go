@@ -80,7 +80,7 @@ func (c cUp) Index(ctx context.Context, in cUpInput) (out *cUpOutput, err error)
 	}
 
 	if in.Cli {
-		if err = c.doUpgradeGiteaCLI(ctx, upVer); err != nil {
+		if err = c.doUpgradeCLI(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -174,56 +174,12 @@ func (c cUp) doUpgradeVersion(ctx context.Context, in cUpInput) (out *doUpgradeV
 }
 
 // doUpgradeCLI downloads the new version binary with process.
-func (c cUp) doUpgradeGiteaCLI(ctx context.Context, version string) (err error) {
-	mlog.Print(`start upgrading cli...`)
-	var (
-		downloadUrl = fmt.Sprintf(
-			`https://gitee.com/hanwei98/gf/releases/download/v%s/gf_%s_%s`,
-			version,
-			runtime.GOOS, runtime.GOARCH,
-		)
-		localSaveFilePath = gfile.SelfPath() + "~"
-	)
-
-	if runtime.GOOS == "windows" {
-		downloadUrl += ".exe"
-	}
-
-	mlog.Printf(`start downloading "%s" to "%s", it may take some time`, downloadUrl, localSaveFilePath)
-	err = utils.HTTPDownloadFileWithPercent(downloadUrl, localSaveFilePath)
-	if err != nil {
-		return err
-	}
-
-	defer func() {
-		mlog.Printf(`new version cli binary is successfully installed to "%s"`, gfile.SelfPath())
-		mlog.Printf(`remove temporary buffer file "%s"`, localSaveFilePath)
-		_ = gfile.Remove(localSaveFilePath)
-	}()
-
-	// It fails if file not exist or its size is less than 1MB.
-	if !gfile.Exists(localSaveFilePath) || gfile.Size(localSaveFilePath) < 1024*1024 {
-		mlog.Fatalf(`download "%s" to "%s" failed`, downloadUrl, localSaveFilePath)
-	}
-
-	newFile, err := gfile.Open(localSaveFilePath)
-	if err != nil {
-		return err
-	}
-	// selfupdate
-	err = selfupdate.Apply(newFile, selfupdate.Options{})
-	if err != nil {
-		return err
-	}
-	return
-}
-
-// doUpgradeCLI downloads the new version binary with process.
 func (c cUp) doUpgradeCLI(ctx context.Context) (err error) {
 	mlog.Print(`start upgrading cli...`)
 	var (
+		// https://github.com/hanwei88/gftool/releases/tag/v2.7.2.9
 		downloadUrl = fmt.Sprintf(
-			`https://github.com/gogf/gf/releases/latest/download/gf_%s_%s`,
+			`https://github.com/hanwei88/gftool/releases/latest/download/gf_%s_%s`,
 			runtime.GOOS, runtime.GOARCH,
 		)
 		localSaveFilePath = gfile.SelfPath() + "~"

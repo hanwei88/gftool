@@ -8,7 +8,7 @@ if [ -d "${Dir}" ]; then
 fi
 
 
-gf build -version="$1" -upVersion="$2" -e "-trimpath -ldflags '%s -w -s' -buildmode=pie"  main.go
+gf build -version="$1" -e "-trimpath -ldflags '%s -w -s' -buildmode=pie"  main.go
 
 
 function mvgGfToDir() {

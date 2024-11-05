@@ -213,9 +213,11 @@ type (
 		HashTag         HashIdTag `name:"hashTag" short:"ht" brief:"{CGenDaoBriefJsonIgnoreField}" orphan:"true"`
 		Omitempty       Omitempty `name:"omitempty" short:"ot" brief:"{CGenDaoBriefJsonIgnoreField}" orphan:"true"`
 
-		TypeMapping  map[DBFieldTypeName]CustomAttributeType  `name:"typeMapping" short:"y" brief:"{CGenDaoBriefTypeMapping}" orphan:"true"`
-		FieldMapping map[DBTableFieldName]CustomAttributeType `name:"fieldMapping" short:"fm"  brief:"{CGenDaoBriefFieldMapping}" orphan:"true"`
-		genItems     *CGenDaoInternalGenItems
+		TypeMapping  map[DBFieldTypeName]CustomAttributeType  `name:"typeMapping"  short:"y"  brief:"{CGenDaoBriefTypeMapping}"  orphan:"true"`
+		FieldMapping map[DBTableFieldName]CustomAttributeType `name:"fieldMapping" short:"fm" brief:"{CGenDaoBriefFieldMapping}" orphan:"true"`
+
+		// internal usage purpose.
+		genItems *CGenDaoInternalGenItems
 	}
 	CGenDaoOutput struct{}
 
