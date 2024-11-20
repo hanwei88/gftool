@@ -3,7 +3,7 @@ module github.com/gogf/gf/contrib/metric/otelmetric/v2
 go 1.20
 
 require (
-	github.com/gogf/gf/v2 v2.8.0-beta
+	github.com/gogf/gf/v2 v2.8.0
 	github.com/prometheus/client_golang v1.19.1
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.49.0
 	go.opentelemetry.io/otel v1.24.0
@@ -29,20 +29,12 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
-<<<<<<< HEAD
-	github.com/olekukonko/tablewriter v0.0.5 // indirect
-	github.com/prometheus/client_model v0.6.0 // indirect
-	github.com/prometheus/common v0.48.0 // indirect
-	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/rivo/uniseg v0.4.4 // indirect
-=======
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
->>>>>>> e4c4fb591e4f281c9406b7b01d0b24d703e1c9da
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	golang.org/x/net v0.27.0 // indirect

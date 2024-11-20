@@ -23,5 +23,3 @@ go.work.sum
 node_modules
 .docusaurus
 output
-*.exe
-cmd/gf/internal/model

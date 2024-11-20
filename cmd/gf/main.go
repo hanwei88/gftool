@@ -23,8 +23,11 @@ func main() {
 	var (
 		ctx = gctx.GetInitCtx()
 	)
+
 	cmd.SetVersion(appVersion)
 	cmd.SetUpVer(upVersion)
+	//cmd.SetVersion(appVersion)
+	//cmd.SetUpVer(upVersion)
 	command, err := gfcmd.GetCommand(ctx)
 	if err != nil {
 		mlog.Fatalf(`%+v`, err)
