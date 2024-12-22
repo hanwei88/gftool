@@ -1,11 +1,14 @@
 #!/bin/bash
 
 Dir="/media/hanwei/dev/go/repo/gf/cmd/gf/bin/$1"
-
+echo "${Dir}"
 if [ -d "${Dir}" ]; then
     echo "目录已存在,清空目录内容"
     rm -rf "${Dir}"
     mkdir -p "${Dir}"
+else
+      echo "创建目录"
+      mkdir -p "${Dir}"
 fi
 
 

@@ -7,12 +7,23 @@
 package main
 
 import (
+	"github.com/gogf/gf/cmd/gf/v2/internal/cmd"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/os/gctx"
 
 	"github.com/gogf/gf/cmd/gf/v2/gfcmd"
 	"github.com/gogf/gf/cmd/gf/v2/internal/utility/mlog"
 )
+
+var (
+	appVersion string
+	upVersion  string
+)
+
+func _setVersion() {
+	cmd.SetVersion(appVersion)
+	cmd.SetUpVer(upVersion)
+}
 
 func main() {
 	var (
