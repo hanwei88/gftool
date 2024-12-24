@@ -34,6 +34,8 @@ function mvgGfToDir() {
                     filename="${filename}.exe"
                 fi
                 mv "$1/$file" "$filename"
+                # 删除生成的目录
+                rm -rf "$1"
             fi
        fi
     done
