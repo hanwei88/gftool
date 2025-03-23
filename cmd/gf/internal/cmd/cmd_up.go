@@ -178,7 +178,6 @@ func (c cUp) doUpgradeVersion(ctx context.Context, in cUpInput) (out *doUpgradeV
 func (c cUp) doUpgradeCLI(ctx context.Context) (err error) {
 	mlog.Print(`start upgrading cli...`)
 	var (
-		// https://github.com/hanwei88/gftool/releases/tag/v2.7.2.9
 		downloadUrl = fmt.Sprintf(
 			`https://github.com/hanwei88/gftool/releases/latest/download/gf_%s_%s`,
 			runtime.GOOS, runtime.GOARCH,

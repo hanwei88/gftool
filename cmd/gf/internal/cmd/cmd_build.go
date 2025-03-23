@@ -340,7 +340,7 @@ func (c cBuild) doBinaryBuild(
 	)
 	mlog.Debug(fmt.Sprintf("build for GOOS=%s GOARCH=%s", system, arch))
 	mlog.Debug(cmd)
-	// 无需打印完整的命令字符串，过滤 ldFlags。
+	// It's not necessary printing the complete command string, filtering ldFlags.
 	cmdShow, _ := gregex.ReplaceString(`\s+(-ldflags ".+?")\s+`, " ", cmd)
 	mlog.Print(cmdShow)
 	if result, err := gproc.ShellExec(ctx, cmd); err != nil {

@@ -103,7 +103,7 @@ func (c *Core) DoExec(ctx context.Context, link Link, sql string, args ...interf
 			return nil, err
 		}
 	} else if !link.IsTransaction() {
-		// If current link is not transaction link, it checks and retrieves transaction from context.
+		// If current link is not transaction link, it tries retrieving transaction object from context.
 		if tx := TXFromCtx(ctx, c.db.GetGroup()); tx != nil {
 			link = &txLink{tx.GetSqlTX()}
 		}
@@ -180,14 +180,17 @@ func (c *Core) DoCommit(ctx context.Context, in DoCommitInput) (out DoCommitOutp
 			formattedSql, in.TxOptions.Isolation.String(), in.TxOptions.ReadOnly,
 		)
 		if sqlTx, err = in.Db.BeginTx(ctx, &in.TxOptions); err == nil {
-			out.Tx = &TXCore{
+			tx := &TXCore{
 				db:            c.db,
 				tx:            sqlTx,
-				ctx:           context.WithValue(ctx, transactionIdForLoggerCtx, transactionIdGenerator.Add(1)),
+				ctx:           ctx,
 				master:        in.Db,
 				transactionId: guid.S(),
 				cancelFunc:    cancelFuncForTimeout,
 			}
+			tx.ctx = context.WithValue(ctx, transactionKeyForContext(tx.db.GetGroup()), tx)
+			tx.ctx = context.WithValue(tx.ctx, transactionIdForLoggerCtx, transactionIdGenerator.Add(1))
+			out.Tx = tx
 			ctx = out.Tx.GetCtx()
 		}
 		out.RawResult = sqlTx
@@ -388,6 +391,22 @@ func (c *Core) FormatUpsert(columns []string, list List, option DoInsertOption) 
 					c.QuoteWord(k),
 					v,
 				)
+			case Counter, *Counter:
+				var counter Counter
+				switch value := v.(type) {
+				case Counter:
+					counter = value
+				case *Counter:
+					counter = *value
+				}
+				operator, columnVal := c.getCounterAlter(counter)
+				onDuplicateStr += fmt.Sprintf(
+					"%s=%s%s%s",
+					c.QuoteWord(k),
+					c.QuoteWord(counter.Field),
+					operator,
+					gconv.String(columnVal),
+				)
 			default:
 				onDuplicateStr += fmt.Sprintf(
 					"%s=VALUES(%s)",
@@ -459,8 +478,11 @@ func (c *Core) RowsToResult(ctx context.Context, rows *sql.Rows) (Result, error)
 				// which will cause struct converting issue.
 				record[columnTypes[i].Name()] = nil
 			} else {
-				var convertedValue interface{}
-				if convertedValue, err = c.columnValueToLocalValue(ctx, value, columnTypes[i]); err != nil {
+				var (
+					convertedValue interface{}
+					columnType     = columnTypes[i]
+				)
+				if convertedValue, err = c.columnValueToLocalValue(ctx, value, columnType); err != nil {
 					return nil, err
 				}
 				record[columnTypes[i].Name()] = gvar.New(convertedValue)
@@ -479,7 +501,9 @@ func (c *Core) OrderRandomFunction() string {
 	return "RAND()"
 }
 
-func (c *Core) columnValueToLocalValue(ctx context.Context, value interface{}, columnType *sql.ColumnType) (interface{}, error) {
+func (c *Core) columnValueToLocalValue(
+	ctx context.Context, value interface{}, columnType *sql.ColumnType,
+) (interface{}, error) {
 	var scanType = columnType.ScanType()
 	if scanType != nil {
 		// Common basic builtin types.

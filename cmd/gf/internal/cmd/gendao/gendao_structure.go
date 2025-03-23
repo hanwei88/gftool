@@ -99,7 +99,6 @@ func generateStructFieldDefinition(
 	}
 
 	if localTypeNameStr == "" {
-
 		localTypeName, err = in.DB.CheckLocalTypeForField(ctx, field.Type, nil)
 		if err != nil {
 			panic(err)
@@ -206,6 +205,18 @@ func generateStructFieldDefinition(
 
 	if in.DescriptionTag { // 生成描述标签
 		attrs = append(attrs, fmt.Sprintf(` #description:"%s"`, descriptionTag))
+	}
+	for k, v := range attrs {
+		if in.NoJsonTag {
+			v, _ = gregex.ReplaceString(`json:".+"`, ``, v)
+		}
+		if !in.DescriptionTag {
+			v, _ = gregex.ReplaceString(`description:".*"`, ``, v)
+		}
+		if in.NoModelComment {
+			v, _ = gregex.ReplaceString(`//.+`, ``, v)
+		}
+		attrs[k] = v
 	}
 
 	if len(attrs) > 0 {
