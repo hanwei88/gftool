@@ -113,6 +113,32 @@ func (dao *{{.TplTableNameCamelCase}}Dao) Columns() {{.TplTableNameCamelCase}}Co
 	return dao.columns
 }
 
+
+// ReadUncommittedModel The current session switches to the Read Uncommitted Transaction level
+func (dao *{{.TplTableNameCamelCase}}Dao) ReadUncommittedModel(ctx context.Context) (m *gdb.Model, switchFunc func()) {
+	db, switchFunc := SetTransactionLevel(ctx, ReadUncommittedLevel)
+	return dao.Model(ctx, db).Safe().Ctx(ctx), switchFunc
+}
+
+// ReadCommittedModel The current session switches to the Read Committed Transaction level
+func (dao *{{.TplTableNameCamelCase}}Dao) ReadCommittedModel(ctx context.Context) (m *gdb.Model, switchFunc func()) {
+	db, switchFunc := SetTransactionLevel(ctx, ReadCommittedLevel)
+	return dao.Model(ctx, db).Safe().Ctx(ctx), switchFunc
+}
+
+// RepeatableReadModel The current session switches to the Repeatable Read Transaction level
+func (dao *{{.TplTableNameCamelCase}}Dao) RepeatableReadModel(ctx context.Context) (m *gdb.Model, switchFunc func()) {
+	db, switchFunc := SetTransactionLevel(ctx, RepeatableReadLevel)
+	return dao.Model(ctx, db).Safe().Ctx(ctx), switchFunc
+}
+
+// SerializableModel The current session switches to the Serializable Transaction level
+func (dao *{{.TplTableNameCamelCase}}Dao) SerializableModel(ctx context.Context) (m *gdb.Model, switchFunc func()) {
+	db, switchFunc := SetTransactionLevel(ctx, SerializableLevel)
+	return dao.Model(ctx, db).Safe().Ctx(ctx), switchFunc
+}
+
+
 // Group returns the database configuration group name of the current DAO.
 func (dao *{{.TplTableNameCamelCase}}Dao) Group() string {
 	return dao.group
