@@ -113,6 +113,10 @@ func (dao *{{.TplTableNameCamelCase}}Dao) Columns() {{.TplTableNameCamelCase}}Co
 	return dao.columns
 }
 
+// Model returns the model class based on the db interface
+func (dao *{{.TplTableNameCamelCase}}Dao) Model(ctx context.Context, db gdb.DB) *gdb.Model {
+	return db.Model(dao.table).Safe().Ctx(ctx)
+}
 
 // ReadUncommittedModel The current session switches to the Read Uncommitted Transaction level
 func (dao *{{.TplTableNameCamelCase}}Dao) ReadUncommittedModel(ctx context.Context) (m *gdb.Model, switchFunc func()) {
